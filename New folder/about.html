@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us — CodeForge Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Poppins', sans-serif; background: #0b1120; color: white; line-height: 1.6; }
+
+  /* ── Header ── */
+  header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 8%; background: #020617; position: sticky; top: 0; z-index: 100;
+  }
+  .logo { font-weight: 600; font-size: 22px; color: #60a5fa; text-decoration: none; }
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    cursor: pointer; background: none; border: none; padding: 4px;
+  }
+  .hamburger span { display: block; width: 24px; height: 2px; background: white; border-radius: 2px; transition: 0.3s; }
+  nav { display: flex; gap: 4px; flex-wrap: wrap; }
+  nav a {
+    padding: 6px 10px; text-decoration: none; color: rgba(255,255,255,0.8);
+    font-size: 14px; border-radius: 6px; transition: color 0.2s, background 0.2s;
+  }
+  nav a:hover, nav a:focus, nav a.active { color: #60a5fa; background: rgba(96,165,250,0.1); outline: none; }
+  @media (max-width: 768px) {
+    .hamburger { display: flex; }
+    nav {
+      display: none; position: absolute; top: 100%; left: 0; right: 0;
+      flex-direction: column; background: #020617;
+      padding: 16px 8%; border-top: 1px solid rgba(96,165,250,0.2); gap: 0;
+    }
+    nav.open { display: flex; }
+    nav a { padding: 10px 4px; border-radius: 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  }
+
+  /* ── Skip link ── */
+  .skip-link { position: absolute; left: -999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+  .skip-link:focus {
+    left: 8px; top: 8px; width: auto; height: auto;
+    background: #3b82f6; color: white; padding: 8px 16px;
+    border-radius: 6px; z-index: 999; font-size: 14px;
+  }
+
+  /* ── Buttons ── */
+  .btn {
+    display: inline-block; padding: 12px 28px; border-radius: 30px;
+    text-decoration: none; font-size: 14px; font-family: 'Poppins', sans-serif;
+    cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .primary { background: #3b82f6; color: white; border: none; }
+  .secondary { border: 1px solid #3b82f6; color: #60a5fa; background: transparent; }
+  .btn:hover { transform: scale(1.05); box-shadow: 0 4px 20px rgba(59,130,246,0.35); }
+  .btn:focus-visible { outline: 2px solid #60a5fa; outline-offset: 3px; }
+  .btn-group { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+
+  /* ── Hero ── */
+  .hero {
+    min-height: 60vh; display: flex; flex-direction: column;
+    justify-content: center; align-items: center; text-align: center;
+    padding: 60px 8%; background: linear-gradient(135deg, #020617, #0f172a);
+  }
+  .hero h1 { font-size: clamp(32px, 6vw, 52px); margin-bottom: 20px; line-height: 1.2; }
+  .hero p { max-width: 600px; margin-bottom: 30px; opacity: 0.8; font-size: clamp(15px, 2vw, 17px); }
+
+  /* ── Sections ── */
+  section { padding: 80px 8%; }
+  .section-title { text-align: center; font-size: clamp(24px, 4vw, 32px); margin-bottom: 50px; color: #60a5fa; }
+
+  /* ── Story split ── */
+  .story {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+  }
+  .story-text h2 { font-size: clamp(22px, 3vw, 28px); color: #60a5fa; margin-bottom: 16px; }
+  .story-text p { opacity: 0.8; margin-bottom: 14px; font-size: 15px; }
+  .story-visual {
+    background: #111827; border-radius: 16px;
+    border: 1px solid rgba(96,165,250,0.12);
+    padding: 40px; display: flex; flex-direction: column; gap: 20px;
+  }
+  .stat-row { display: flex; align-items: center; gap: 16px; }
+  .stat-num { font-size: 36px; font-weight: 600; color: #60a5fa; min-width: 80px; }
+  .stat-label { opacity: 0.75; font-size: 14px; line-height: 1.4; }
+  @media (max-width: 768px) {
+    .story { grid-template-columns: 1fr; gap: 32px; }
+  }
+
+  /* ── Mission/Vision cards ── */
+  .mv-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 25px; }
+  .mv-card {
+    background: #111827; padding: 28px; border-radius: 14px;
+    border: 1px solid rgba(96,165,250,0.08); transition: transform 0.3s, background 0.3s;
+  }
+  .mv-card:hover { transform: translateY(-5px); background: #1f2937; }
+  .mv-card .icon {
+    font-size: 28px; margin-bottom: 14px; display: block;
+    width: 52px; height: 52px; background: rgba(96,165,250,0.1);
+    border-radius: 12px; display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px;
+  }
+  .mv-card h3 { color: #60a5fa; margin-bottom: 10px; font-size: 18px; }
+  .mv-card p { opacity: 0.8; font-size: 14px; }
+
+  /* ── Team ── */
+  .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 25px; }
+  .team-card {
+    background: #111827; padding: 28px 20px; border-radius: 14px;
+    border: 1px solid rgba(96,165,250,0.08); text-align: center;
+    transition: transform 0.3s;
+  }
+  .team-card:hover { transform: translateY(-5px); }
+  .avatar {
+    width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 14px;
+    background: linear-gradient(135deg, #1e3a5f, #3b82f6);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; font-weight: 600; color: #93c5fd;
+    border: 2px solid rgba(96,165,250,0.3);
+  }
+  .team-card h3 { font-size: 16px; margin-bottom: 4px; }
+  .team-card .role { color: #60a5fa; font-size: 13px; margin-bottom: 10px; }
+  .team-card p { opacity: 0.7; font-size: 13px; }
+
+  /* ── Why choose us ── */
+  .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+  .why-item {
+    display: flex; gap: 16px; align-items: flex-start;
+    background: #111827; padding: 22px; border-radius: 12px;
+    border: 1px solid rgba(96,165,250,0.08);
+  }
+  .why-dot {
+    width: 10px; height: 10px; background: #3b82f6; border-radius: 50%;
+    flex-shrink: 0; margin-top: 7px;
+  }
+  .why-item h4 { color: #60a5fa; margin-bottom: 4px; font-size: 15px; }
+  .why-item p { opacity: 0.75; font-size: 13px; }
+
+  /* ── CTA Banner ── */
+  .cta-banner {
+    background: linear-gradient(135deg, #1e3a5f, #0f172a);
+    border: 1px solid rgba(96,165,250,0.2);
+    border-radius: 20px; padding: 60px 40px; text-align: center;
+    margin: 0 8% 80px;
+  }
+  .cta-banner h2 { font-size: clamp(22px, 3vw, 30px); margin-bottom: 14px; }
+  .cta-banner p { opacity: 0.8; margin-bottom: 28px; max-width: 500px; margin-left: auto; margin-right: auto; margin-bottom: 28px; }
+
+  /* ── Footer ── */
+  footer { text-align: center; padding: 25px; background: #020617; font-size: 14px; opacity: 0.7; }
+
+  /* ── Fade ── */
+  .fade { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .fade.show { opacity: 1; transform: translateY(0); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fade { transition: none; opacity: 1; transform: none; }
+    .btn:hover, .mv-card:hover, .team-card:hover { transform: none; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header>
+  <a class="logo" href="index.html" aria-label="CodeForge Academy home">CodeForge</a>
+  <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false" id="hamburger">
+    <span></span><span></span><span></span>
+  </button>
+  <nav id="main-nav" role="navigation" aria-label="Main navigation">
+    <a href="index.html#home">Home</a>
+    <a href="index.html#services">Services</a>
+    <a href="index.html#learn">Courses</a>
+    <a href="index.html#pricing">Pricing</a>
+    <a href="about.html" class="active">About Us</a>
+    <a href="login.html">Login</a>
+    <a href="index.html#contact">Contact</a>
+  </nav>
+</header>
+
+<main id="main">
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>We Love Teaching Code</h1>
+    <p>CodeForge Academy was built by learners, for learners. Our mission is to make programming accessible to everyone — no prior experience needed.</p>
+    <div class="btn-group">
+      <a class="btn primary" href="index.html#learn">Browse Courses</a>
+      <a class="btn secondary" href="index.html#contact">Get in Touch</a>
+    </div>
+  </section>
+
+  <!-- Our Story -->
+  <section class="fade">
+    <div class="story">
+      <div class="story-text">
+        <h2>Our Story</h2>
+        <p>CodeForge Academy started as a simple idea: programming shouldn't be intimidating. Too many great people give up on coding before they ever get a chance to love it.</p>
+        <p>We built a curriculum that meets beginners where they are — step by step, project by project — so that every student finishes with real skills and real confidence.</p>
+        <p>Since 2023, we've helped hundreds of students go from "I don't know where to start" to building their first websites and landing their first tech opportunities.</p>
+      </div>
+      <div class="story-visual" aria-label="Academy stats">
+        <div class="stat-row">
+          <div class="stat-num">300+</div>
+          <div class="stat-label">Students taught across all programs</div>
+        </div>
+        <div style="height:1px;background:rgba(96,165,250,0.1)"></div>
+        <div class="stat-row">
+          <div class="stat-num">3</div>
+          <div class="stat-label">Flexible learning plans for every budget</div>
+        </div>
+        <div style="height:1px;background:rgba(96,165,250,0.1)"></div>
+        <div class="stat-row">
+          <div class="stat-num">98%</div>
+          <div class="stat-label">Student satisfaction rate</div>
+        </div>
+        <div style="height:1px;background:rgba(96,165,250,0.1)"></div>
+        <div class="stat-row">
+          <div class="stat-num">2yrs</div>
+          <div class="stat-label">Teaching and building since 2023</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mission & Vision -->
+  <section class="fade" style="background:#020617;">
+    <h2 class="section-title">Mission &amp; Vision</h2>
+    <div class="mv-grid">
+      <div class="mv-card">
+        <div class="icon" aria-hidden="true">🎯</div>
+        <h3>Our Mission</h3>
+        <p>Make coding education accessible, affordable, and genuinely enjoyable for anyone who wants to learn — regardless of background or experience level.</p>
+      </div>
+      <div class="mv-card">
+        <div class="icon" aria-hidden="true">🔭</div>
+        <h3>Our Vision</h3>
+        <p>A world where every person who wants to build with technology has a clear path forward — supported by great teachers and a community that cheers them on.</p>
+      </div>
+      <div class="mv-card">
+        <div class="icon" aria-hidden="true">💡</div>
+        <h3>Our Approach</h3>
+        <p>Learn by doing. Every lesson is built around real projects so you're always moving toward something tangible — not just memorizing theory.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team -->
+  <section class="fade">
+    <h2 class="section-title">Meet the Team</h2>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="avatar" aria-hidden="true">AK</div>
+        <h3>Alex Kim</h3>
+        <p class="role">Founder &amp; Lead Instructor</p>
+        <p>Self-taught developer with 8 years of experience. Passionate about making code feel approachable.</p>
+      </div>
+      <div class="team-card">
+        <div class="avatar" aria-hidden="true" style="background:linear-gradient(135deg,#1e3a5f,#6d28d9);">MR</div>
+        <h3>Maya Reyes</h3>
+        <p class="role">Curriculum Designer</p>
+        <p>Former teacher turned developer. Builds lessons that actually stick.</p>
+      </div>
+      <div class="team-card">
+        <div class="avatar" aria-hidden="true" style="background:linear-gradient(135deg,#1e3a5f,#0e7490);">JS</div>
+        <h3>Jake Santos</h3>
+        <p class="role">Tutor &amp; Mentor</p>
+        <p>Loves debugging almost as much as he loves helping students debug.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Choose Us -->
+  <section class="fade" style="background:#020617;">
+    <h2 class="section-title">Why Choose CodeForge</h2>
+    <div class="why-grid">
+      <div class="why-item">
+        <div class="why-dot"></div>
+        <div>
+          <h4>Beginner Friendly</h4>
+          <p>No jargon. No assumptions. We start from zero and build up at your pace.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-dot"></div>
+        <div>
+          <h4>Real Projects</h4>
+          <p>Everything you build is something you can show off in a portfolio.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-dot"></div>
+        <div>
+          <h4>Flexible Scheduling</h4>
+          <p>Sessions work around your life — not the other way around.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-dot"></div>
+        <div>
+          <h4>Personal Support</h4>
+          <p>You'll never be stuck alone. Reach us anytime between sessions.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-dot"></div>
+        <div>
+          <h4>Affordable Plans</h4>
+          <p>Three tiers designed to fit different budgets and learning goals.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-dot"></div>
+        <div>
+          <h4>Proven Results</h4>
+          <p>Our students go on to build real websites and start real careers in tech.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- CTA Banner -->
+<div class="cta-banner fade" role="complementary" aria-label="Call to action">
+  <h2>Ready to Start Your Coding Journey?</h2>
+  <p>Join hundreds of students who turned "I have no idea how to code" into real skills they use every day.</p>
+  <div class="btn-group">
+    <a class="btn primary" href="signup.html">Create Free Account</a>
+    <a class="btn secondary" href="index.html#pricing">See Plans</a>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2026 CodeForge Academy &mdash; Learn Coding The Smart Way</p>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) { entry.target.classList.add('show'); observer.unobserve(entry.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade').forEach(el => observer.observe(el));
+
+  const hamburger = document.getElementById('hamburger');
+  const nav = document.getElementById('main-nav');
+  hamburger.addEventListener('click', () => {
+    const isOpen = nav.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', isOpen);
+  });
+  nav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      nav.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', false);
+    });
+  });
+</script>
+
+</body>
+</html>

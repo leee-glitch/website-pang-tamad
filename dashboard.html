@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeForge Academy — Campus</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --floor:    #0a0e1a;
+    --wall:     #0d1425;
+    --wall2:    #111827;
+    --door:     #1a2744;
+    --door-lit: #1e3060;
+    --accent:   #3b82f6;
+    --accent2:  #60a5fa;
+    --gold:     #f59e0b;
+    --green:    #10b981;
+    --red:      #ef4444;
+    --purple:   #8b5cf6;
+    --text:     #e2e8f0;
+    --muted:    rgba(226,232,240,0.5);
+    --border:   rgba(96,165,250,0.15);
+    --glow:     rgba(59,130,246,0.25);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--floor);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 32px; height: 60px;
+    background: #060a14;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 200;
+  }
+  .topbar-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 20px; color: var(--accent2);
+    text-decoration: none; letter-spacing: -0.5px;
+  }
+  .topbar-logo span { color: var(--gold); }
+  .topbar-center {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px; font-weight: 600;
+    color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .topbar-right { display: flex; align-items: center; gap: 16px; }
+  .notif-btn {
+    background: none; border: none; color: var(--muted);
+    cursor: pointer; font-size: 18px; padding: 4px;
+    position: relative; transition: color 0.2s;
+  }
+  .notif-btn:hover { color: var(--accent2); }
+  .notif-dot {
+    width: 8px; height: 8px; background: var(--red);
+    border-radius: 50%; position: absolute; top: 2px; right: 2px;
+    border: 2px solid #060a14;
+  }
+  .avatar-btn {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, #1e3a5f, var(--accent));
+    border: 2px solid var(--border); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
+    color: var(--accent2); transition: border-color 0.2s;
+  }
+  .avatar-btn:hover { border-color: var(--accent); }
+
+  /* ── CAMPUS LAYOUT ── */
+  .campus {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: calc(100vh - 60px);
+  }
+
+  /* ── SIDEBAR: student locker / info ── */
+  .sidebar {
+    background: var(--wall);
+    border-right: 1px solid var(--border);
+    padding: 28px 20px;
+    display: flex; flex-direction: column; gap: 28px;
+  }
+
+  .student-card {
+    background: var(--wall2);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 20px;
+    text-align: center;
+  }
+  .student-avatar {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: linear-gradient(135deg, #1e3a5f, var(--accent));
+    margin: 0 auto 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px;
+    color: var(--accent2);
+    border: 3px solid rgba(96,165,250,0.3);
+    box-shadow: 0 0 24px var(--glow);
+  }
+  .student-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; margin-bottom: 2px; }
+  .student-plan {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--gold);
+    background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.2);
+    border-radius: 20px; padding: 3px 10px; display: inline-block; margin-bottom: 14px;
+  }
+  .xp-bar-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+  .xp-bar { height: 6px; background: rgba(255,255,255,0.06); border-radius: 6px; overflow: hidden; }
+  .xp-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 6px; width: 68%; }
+
+  .sidebar-section-title {
+    font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .stat-row { display: flex; flex-direction: column; gap: 8px; }
+  .stat-item {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--wall2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 10px 14px;
+  }
+  .stat-left { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+  .stat-icon { font-size: 15px; }
+  .stat-val { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--accent2); }
+
+  .nav-links { display: flex; flex-direction: column; gap: 4px; }
+  .nav-link {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 12px; border-radius: 10px; font-size: 14px;
+    color: var(--muted); text-decoration: none; cursor: pointer;
+    transition: background 0.2s, color 0.2s; border: none; background: none;
+    font-family: 'DM Sans', sans-serif; width: 100%; text-align: left;
+  }
+  .nav-link:hover, .nav-link.active {
+    background: rgba(96,165,250,0.08); color: var(--accent2);
+  }
+  .nav-link .nl-icon { font-size: 16px; }
+
+  .logout-btn {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: 10px; font-size: 14px;
+    color: rgba(239,68,68,0.7); cursor: pointer;
+    transition: background 0.2s, color 0.2s; border: none; background: none;
+    font-family: 'DM Sans', sans-serif; width: 100%; text-align: left;
+    margin-top: auto;
+  }
+  .logout-btn:hover { background: rgba(239,68,68,0.08); color: var(--red); }
+
+  /* ── MAIN: HALLWAY ── */
+  .hallway {
+    background: var(--floor);
+    padding: 36px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Subtle perspective floor lines */
+  .hallway::before {
+    content: '';
+    position: fixed;
+    bottom: 0; left: 260px; right: 0;
+    height: 40vh;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 39px,
+      rgba(96,165,250,0.03) 40px
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .hallway-header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    margin-bottom: 36px; position: relative; z-index: 1;
+  }
+  .hallway-title {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(26px, 3vw, 36px); line-height: 1.1;
+    margin-bottom: 6px;
+  }
+  .hallway-title span { color: var(--accent2); }
+  .hallway-sub { color: var(--muted); font-size: 14px; }
+
+  .floor-indicator {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--wall2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 8px 14px; font-size: 13px;
+    color: var(--muted);
+  }
+  .floor-indicator strong { color: var(--accent2); font-family: 'Syne', sans-serif; }
+
+  /* ── HALLWAY CORRIDOR ── */
+  .corridor {
+    position: relative; z-index: 1;
+  }
+
+  /* Wall strip above the doors */
+  .wall-strip {
+    height: 18px;
+    background: linear-gradient(180deg, #080c18 0%, var(--wall) 100%);
+    border-radius: 12px 12px 0 0;
+    border: 1px solid var(--border);
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+
+  .rooms-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0;
+    background: var(--wall);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    padding: 0 24px;
+    position: relative;
+  }
+
+  /* Ceiling light strip */
+  .rooms-row::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(96,165,250,0.4), rgba(96,165,250,0.6), rgba(96,165,250,0.4), transparent);
+    border-radius: 2px;
+    box-shadow: 0 0 20px 4px rgba(96,165,250,0.15);
+  }
+
+  /* ── ROOM DOOR ── */
+  .room {
+    padding: 24px 16px 20px;
+    border-left: 1px solid rgba(96,165,250,0.07);
+    display: flex; flex-direction: column; align-items: center;
+    position: relative;
+    cursor: pointer;
+  }
+  .room:first-child { border-left: none; }
+
+  .room-number {
+    font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.14em; color: var(--muted); margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  /* The door itself */
+  .door {
+    width: 100%; max-width: 150px;
+    aspect-ratio: 0.55;
+    background: var(--door);
+    border-radius: 6px 6px 0 0;
+    border: 2px solid rgba(96,165,250,0.2);
+    position: relative;
+    transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: flex-start; padding: 14px 10px 10px;
+    overflow: hidden;
+  }
+
+  /* Door window */
+  .door-window {
+    width: 60%; aspect-ratio: 1;
+    background: rgba(96,165,250,0.07);
+    border: 1px solid rgba(96,165,250,0.2);
+    border-radius: 4px;
+    margin-bottom: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    transition: background 0.3s;
+    position: relative; overflow: hidden;
+  }
+
+  /* Light under door crack */
+  .door::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 10%; right: 10%;
+    height: 3px;
+    border-radius: 3px;
+    transition: box-shadow 0.3s, background 0.3s;
+  }
+
+  /* Door knob */
+  .door-knob {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--gold);
+    position: absolute; right: 14px; top: 50%;
+    box-shadow: 0 0 6px rgba(245,158,11,0.4);
+    transition: box-shadow 0.3s;
+  }
+
+  /* Door panel lines */
+  .door-panel {
+    width: 80%; height: 3px;
+    background: rgba(96,165,250,0.08);
+    border-radius: 2px; margin-top: 6px;
+  }
+  .door-panel + .door-panel { margin-top: 4px; opacity: 0.5; }
+
+  /* Status badge */
+  .room-status {
+    position: absolute; top: 10px; right: 10px;
+    font-size: 10px; font-weight: 500; letter-spacing: 0.06em;
+    text-transform: uppercase; padding: 3px 8px; border-radius: 20px;
+  }
+  .status-open   { background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
+  .status-live   { background: rgba(239,68,68,0.15);  color: var(--red);   border: 1px solid rgba(239,68,68,0.3);  animation: pulse-red 2s infinite; }
+  .status-locked { background: rgba(255,255,255,0.05); color: var(--muted); border: 1px solid rgba(255,255,255,0.08); }
+
+  @keyframes pulse-red {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); }
+    50%       { box-shadow: 0 0 0 4px rgba(239,68,68,0.2); }
+  }
+
+  .room-label {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 13px; text-align: center; margin-top: 12px;
+    line-height: 1.3;
+  }
+  .room-desc { font-size: 11px; color: var(--muted); text-align: center; margin-top: 4px; line-height: 1.4; }
+  .room-tutor { font-size: 11px; color: var(--accent2); margin-top: 6px; text-align: center; }
+
+  /* Hover: light on */
+  .room:hover .door {
+    background: var(--door-lit);
+    border-color: rgba(96,165,250,0.45);
+    box-shadow: 0 0 30px rgba(59,130,246,0.15), inset 0 0 20px rgba(59,130,246,0.04);
+  }
+  .room:hover .door-window {
+    background: rgba(96,165,250,0.15);
+    box-shadow: 0 0 12px rgba(96,165,250,0.3);
+  }
+  .room:hover .door::after {
+    background: rgba(96,165,250,0.4);
+    box-shadow: 0 0 12px 3px rgba(96,165,250,0.25);
+  }
+  .room:hover .door-knob { box-shadow: 0 0 10px rgba(245,158,11,0.7); }
+  .room.locked:hover .door { cursor: not-allowed; border-color: rgba(255,255,255,0.1); box-shadow: none; }
+  .room.locked:hover .door-window { background: rgba(96,165,250,0.05); box-shadow: none; }
+
+  /* Floor mat under door */
+  .door-mat {
+    width: 80%; max-width: 130px; height: 6px;
+    background: linear-gradient(90deg, transparent, rgba(96,165,250,0.12), transparent);
+    border-radius: 0 0 4px 4px;
+  }
+
+  /* ── HALLWAY FLOOR STRIP ── */
+  .floor-strip {
+    height: 14px;
+    background: linear-gradient(180deg, #0a0e1a 0%, #060a14 100%);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    margin-bottom: 40px;
+  }
+
+  /* ── SECOND ROW: special rooms ── */
+  .section-label {
+    font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+    display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+    position: relative; z-index: 1;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* ── QUICK STATS ROW ── */
+  .quick-row {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px; margin-bottom: 40px; position: relative; z-index: 1;
+  }
+  .quick-card {
+    background: var(--wall2); border: 1px solid var(--border);
+    border-radius: 14px; padding: 18px 20px;
+    display: flex; align-items: center; gap: 14px;
+    transition: border-color 0.2s;
+  }
+  .quick-card:hover { border-color: rgba(96,165,250,0.35); }
+  .quick-icon {
+    width: 42px; height: 42px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center; font-size: 20px;
+    flex-shrink: 0;
+  }
+  .qi-blue   { background: rgba(59,130,246,0.12); }
+  .qi-green  { background: rgba(16,185,129,0.12); }
+  .qi-gold   { background: rgba(245,158,11,0.12); }
+  .qi-purple { background: rgba(139,92,246,0.12); }
+  .quick-val { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; line-height: 1; }
+  .quick-lbl { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  /* ── MODAL: ROOM / CHAT ── */
+  .overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+    z-index: 500; display: none; align-items: center; justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(6px);
+  }
+  .overlay.open { display: flex; }
+
+  .modal {
+    background: var(--wall2);
+    border: 1px solid rgba(96,165,250,0.25);
+    border-radius: 20px;
+    width: 100%; max-width: 680px;
+    max-height: 90vh;
+    display: flex; flex-direction: column;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 0 60px rgba(59,130,246,0.08);
+    animation: modal-in 0.25s cubic-bezier(.22,1,.36,1);
+    overflow: hidden;
+  }
+  @keyframes modal-in {
+    from { opacity: 0; transform: scale(0.95) translateY(12px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .modal-header {
+    display: flex; align-items: center; gap: 14px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .modal-room-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: rgba(59,130,246,0.12); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center; font-size: 22px;
+  }
+  .modal-room-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; }
+  .modal-room-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .modal-close {
+    margin-left: auto; background: none; border: none; color: var(--muted);
+    font-size: 22px; cursor: pointer; padding: 4px 8px; border-radius: 8px;
+    transition: color 0.2s, background 0.2s; line-height: 1;
+  }
+  .modal-close:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+
+  /* Tutor presence bar */
+  .tutor-bar {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 24px; background: rgba(16,185,129,0.05);
+    border-bottom: 1px solid rgba(16,185,129,0.12); flex-shrink: 0;
+  }
+  .tutor-online { width: 8px; height: 8px; background: var(--green); border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 8px var(--green); animation: pulse-green 2s infinite; }
+  @keyframes pulse-green { 0%,100%{opacity:1} 50%{opacity:0.5} }
+  .tutor-bar span { font-size: 13px; color: var(--green); }
+  .tutor-bar strong { color: var(--text); }
+
+  /* Chat window */
+  .chat-window {
+    flex: 1; overflow-y: auto; padding: 20px 24px;
+    display: flex; flex-direction: column; gap: 14px;
+    min-height: 280px; max-height: 360px;
+  }
+  .chat-window::-webkit-scrollbar { width: 4px; }
+  .chat-window::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .msg { display: flex; gap: 10px; align-items: flex-end; }
+  .msg.sent { flex-direction: row-reverse; }
+
+  .msg-avatar {
+    width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+  }
+  .msg-avatar.tutor { background: linear-gradient(135deg, #1e3a5f, var(--accent)); color: var(--accent2); }
+  .msg-avatar.student { background: linear-gradient(135deg, #2d1b69, var(--purple)); color: #c4b5fd; }
+
+  .msg-bubble {
+    max-width: 72%; padding: 10px 14px; border-radius: 16px;
+    font-size: 13px; line-height: 1.55;
+  }
+  .msg.recv .msg-bubble {
+    background: rgba(96,165,250,0.08); border: 1px solid rgba(96,165,250,0.15);
+    border-bottom-left-radius: 4px;
+  }
+  .msg.sent .msg-bubble {
+    background: rgba(59,130,246,0.2); border: 1px solid rgba(59,130,246,0.3);
+    border-bottom-right-radius: 4px;
+  }
+  .msg-time { font-size: 10px; color: var(--muted); margin-top: 4px; text-align: right; }
+
+  .chat-divider {
+    text-align: center; font-size: 11px; color: var(--muted);
+    position: relative; margin: 4px 0;
+  }
+  .chat-divider::before, .chat-divider::after {
+    content: ''; position: absolute; top: 50%; width: 38%; height: 1px;
+    background: var(--border);
+  }
+  .chat-divider::before { left: 0; }
+  .chat-divider::after  { right: 0; }
+
+  /* Typing indicator */
+  .typing { display: flex; gap: 4px; align-items: center; padding: 10px 14px; }
+  .typing span {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent2); opacity: 0.5;
+    animation: bounce 1.2s infinite;
+  }
+  .typing span:nth-child(2) { animation-delay: 0.2s; }
+  .typing span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px); opacity:1} }
+
+  /* Chat input */
+  .chat-input-row {
+    display: flex; gap: 10px; align-items: flex-end;
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .chat-input {
+    flex: 1; background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border); border-radius: 12px;
+    padding: 10px 14px; color: var(--text);
+    font-family: 'DM Sans', sans-serif; font-size: 14px;
+    resize: none; max-height: 100px; min-height: 42px;
+    transition: border-color 0.2s;
+  }
+  .chat-input::placeholder { color: var(--muted); }
+  .chat-input:focus { outline: none; border-color: var(--accent); }
+
+  .send-btn {
+    width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0;
+    background: var(--accent); border: none; color: white;
+    cursor: pointer; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .send-btn:hover { background: #2563eb; transform: scale(1.05); }
+  .send-btn:active { transform: scale(0.97); }
+
+  /* ── LOCKED OVERLAY inside door window ── */
+  .lock-icon { font-size: 20px; opacity: 0.4; }
+
+  /* ── ANNOUNCEMENT BANNER ── */
+  .announcement {
+    background: rgba(245,158,11,0.07);
+    border: 1px solid rgba(245,158,11,0.2);
+    border-radius: 12px; padding: 14px 18px;
+    display: flex; align-items: center; gap: 12px;
+    font-size: 13px; color: rgba(245,158,11,0.9);
+    margin-bottom: 32px; position: relative; z-index: 1;
+  }
+  .announcement strong { color: var(--gold); }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .campus { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .hallway { padding: 24px 20px; }
+  }
+  @media (max-width: 600px) {
+    .rooms-row { grid-template-columns: repeat(2, 1fr); padding: 0 12px; }
+    .topbar { padding: 0 16px; }
+    .topbar-center { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .typing span, .status-live, .tutor-online { animation: none; }
+    .modal { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <a class="topbar-logo" href="index.html">Code<span>Forge</span></a>
+  <div class="topbar-center">🏫 CodeForge Campus</div>
+  <div class="topbar-right">
+    <button class="notif-btn" aria-label="Notifications">
+      🔔<div class="notif-dot"></div>
+    </button>
+    <div class="avatar-btn" aria-label="Your profile">JD</div>
+  </div>
+</header>
+
+<div class="campus">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" aria-label="Student info">
+
+    <div class="student-card">
+      <div class="student-avatar">JA</div>
+      <div class="student-name">Jerome Aleligay</div>
+      <div class="student-plan">Standard Plan</div>
+      <div class="xp-bar-label"><span>XP Progress</span><span>680 / 1000</span></div>
+      <div class="xp-bar"><div class="xp-fill"></div></div>
+    </div>
+
+    <div>
+      <div class="sidebar-section-title">Your Stats</div>
+      <div class="stat-row">
+        <div class="stat-item">
+          <div class="stat-left"><span class="stat-icon">📅</span>Sessions</div>
+          <div class="stat-val">12</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-left"><span class="stat-icon">✅</span>Completed</div>
+          <div class="stat-val">8</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-left"><span class="stat-icon">🔥</span>Streak</div>
+          <div class="stat-val">5d</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-left"><span class="stat-icon">⭐</span>Rating</div>
+          <div class="stat-val">4.9</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sidebar-section-title">Navigate</div>
+      <div class="nav-links">
+        <button class="nav-link active"><span class="nl-icon">🏫</span>Hallway</button>
+        <button class="nav-link"><span class="nl-icon">📋</span>My Schedule</button>
+        <button class="nav-link"><span class="nl-icon">📁</span>My Projects</button>
+        <button class="nav-link"><span class="nl-icon">💬</span>Messages</button>
+        <button class="nav-link"><span class="nl-icon">⚙️</span>Settings</button>
+      </div>
+    </div>
+
+    <button class="logout-btn" onclick="window.location.href='login.html'">
+      <span>🚪</span> Leave Campus
+    </button>
+
+  </aside>
+
+  <!-- HALLWAY -->
+  <main class="hallway" id="main" aria-label="Course hallway">
+
+    <!-- Announcement -->
+    <div class="announcement" role="alert">
+      <span>📢</span>
+      <div><strong>Live session tonight!</strong> Room 103 — JavaScript Fundamentals with Tutor Christian, 7:00 PM.</div>
+    </div>
+
+    <!-- Header -->
+    <div class="hallway-header">
+      <div>
+        <div class="hallway-title">Welcome back, <span>Jerome</span> 👋</div>
+        <div class="hallway-sub">Pick a room and start learning — your tutor is waiting.</div>
+      </div>
+      <div class="floor-indicator">
+        <span>📍</span> <strong>Floor 1</strong> &nbsp;·&nbsp; Main Hallway
+      </div>
+    </div>
+
+    <!-- Quick stats -->
+    <div class="quick-row">
+      <div class="quick-card">
+        <div class="quick-icon qi-blue">📚</div>
+        <div><div class="quick-val">3</div><div class="quick-lbl">Rooms available</div></div>
+      </div>
+      <div class="quick-card">
+        <div class="quick-icon qi-green">🟢</div>
+        <div><div class="quick-val">1</div><div class="quick-lbl">Tutor online now</div></div>
+      </div>
+      <div class="quick-card">
+        <div class="quick-icon qi-gold">⏱️</div>
+        <div><div class="quick-val">2h</div><div class="quick-lbl">Session time left</div></div>
+      </div>
+      <div class="quick-card">
+        <div class="quick-icon qi-purple">🏆</div>
+        <div><div class="quick-val">#4</div><div class="quick-lbl">Class rank</div></div>
+      </div>
+    </div>
+
+    <!-- Section: Course Rooms -->
+    <div class="section-label">Course Rooms — Floor 1</div>
+
+    <div class="wall-strip"></div>
+    <div class="rooms-row" role="list">
+
+      <!-- Room 101 -->
+      <div class="room" role="listitem" onclick="openRoom('101')" aria-label="Enter Room 101 - HTML Fundamentals">
+        <div class="room-number">Room 101</div>
+        <div class="room-status status-open">Open</div>
+        <div class="door">
+          <div class="door-window">🌐</div>
+          <div class="door-panel"></div>
+          <div class="door-panel"></div>
+          <div class="door-knob"></div>
+        </div>
+        <div class="door-mat"></div>
+        <div class="room-label">HTML Fundamentals</div>
+        <div class="room-desc">Tags, structure, and your first webpage</div>
+        <div class="room-tutor">👤 Tutor: Aaron N.</div>
+      </div>
+
+      <!-- Room 102 -->
+      <div class="room" role="listitem" onclick="openRoom('102')" aria-label="Enter Room 102 - CSS Styling">
+        <div class="room-number">Room 102</div>
+        <div class="room-status status-open">Open</div>
+        <div class="door">
+          <div class="door-window">🎨</div>
+          <div class="door-panel"></div>
+          <div class="door-panel"></div>
+          <div class="door-knob"></div>
+        </div>
+        <div class="door-mat"></div>
+        <div class="room-label">CSS Styling</div>
+        <div class="room-desc">Colors, layouts, and making things beautiful</div>
+        <div class="room-tutor">👤 Tutor: Ella A.</div>
+      </div>
+
+      <!-- Room 103 — LIVE -->
+      <div class="room" role="listitem" onclick="openRoom('103')" aria-label="Enter Room 103 - JavaScript Basics (Live session)">
+        <div class="room-number">Room 103</div>
+        <div class="room-status status-live">● Live</div>
+        <div class="door">
+          <div class="door-window">⚡</div>
+          <div class="door-panel"></div>
+          <div class="door-panel"></div>
+          <div class="door-knob"></div>
+        </div>
+        <div class="door-mat"></div>
+        <div class="room-label">JavaScript Basics</div>
+        <div class="room-desc">Variables, functions, and interactivity</div>
+        <div class="room-tutor">👤 Tutor: Christian M.</div>
+      </div>
+
+      <!-- Room 104 — Locked -->
+      <div class="room locked" role="listitem" onclick="showLocked('Programming Logic')" aria-label="Room 104 - Programming Logic (locked)">
+        <div class="room-number">Room 104</div>
+        <div class="room-status status-locked">🔒 Locked</div>
+        <div class="door" style="opacity:0.45;">
+          <div class="door-window"><span class="lock-icon">🔒</span></div>
+          <div class="door-panel"></div>
+          <div class="door-panel"></div>
+          <div class="door-knob" style="background:#4b5563;box-shadow:none;"></div>
+        </div>
+        <div class="door-mat" style="opacity:0.3;"></div>
+        <div class="room-label" style="opacity:0.45;">Programming Logic</div>
+        <div class="room-desc" style="opacity:0.35;">Complete Room 103 to unlock</div>
+      </div>
+
+      <!-- Room 105 — Locked -->
+      <div class="room locked" role="listitem" onclick="showLocked('Debugging Skills')" aria-label="Room 105 - Debugging Skills (locked)">
+        <div class="room-number">Room 105</div>
+        <div class="room-status status-locked">🔒 Locked</div>
+        <div class="door" style="opacity:0.45;">
+          <div class="door-window"><span class="lock-icon">🔒</span></div>
+          <div class="door-panel"></div>
+          <div class="door-panel"></div>
+          <div class="door-knob" style="background:#4b5563;box-shadow:none;"></div>
+        </div>
+        <div class="door-mat" style="opacity:0.3;"></div>
+        <div class="room-label" style="opacity:0.45;">Debugging Skills</div>
+        <div class="room-desc" style="opacity:0.35;">Complete Room 104 to unlock</div>
+      </div>
+
+      <!-- Room 106 — Locked (Premium) -->
+      <div class="room locked" role="listitem" onclick="showLocked('1-on-1 Mentorship', true)" aria-label="Room 106 - 1-on-1 Mentorship (Premium only)">
+        <div class="room-number">Room 106</div>
+        <div class="room-status status-locked" style="color:var(--gold);border-color:rgba(245,158,11,0.3);background:rgba(245,158,11,0.08);">⭐ Premium</div>
+        <div class="door" style="opacity:0.45;">
+          <div class="door-window"><span class="lock-icon">⭐</span></div>
+          <div class="door-panel"></div>
+          <div class="door-panel"></div>
+          <div class="door-knob" style="background:#4b5563;box-shadow:none;"></div>
+        </div>
+        <div class="door-mat" style="opacity:0.3;"></div>
+        <div class="room-label" style="opacity:0.45;">1-on-1 Mentorship</div>
+        <div class="room-desc" style="opacity:0.35;">Upgrade to Premium to access</div>
+      </div>
+
+    </div>
+    <div class="floor-strip"></div>
+
+  </main>
+</div>
+
+<!-- ── CHAT MODAL ── -->
+<div class="overlay" id="room-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal">
+
+    <div class="modal-header">
+      <div class="modal-room-icon" id="modal-icon">🌐</div>
+      <div>
+        <div class="modal-room-title" id="modal-title">Room 101</div>
+        <div class="modal-room-sub" id="modal-sub">HTML Fundamentals · Tutor: Aaron N.</div>
+      </div>
+      <button class="modal-close" onclick="closeRoom()" aria-label="Close room">✕</button>
+    </div>
+
+    <div class="tutor-bar">
+      <div class="tutor-online"></div>
+      <span><strong id="modal-tutor">Aaron A.</strong> is online and ready</span>
+    </div>
+
+    <div class="chat-window" id="chat-window" aria-live="polite" aria-label="Chat messages">
+      <!-- Messages injected by JS -->
+    </div>
+
+    <div class="chat-input-row">
+      <textarea class="chat-input" id="chat-input" placeholder="Type a message or question…" rows="1" aria-label="Message input"></textarea>
+      <button class="send-btn" onclick="sendMessage()" aria-label="Send message">➤</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── LOCKED MODAL ── -->
+<div class="overlay" id="locked-overlay" role="dialog" aria-modal="true" aria-label="Room locked">
+  <div class="modal" style="max-width:420px;text-align:center;">
+    <div class="modal-header" style="justify-content:flex-end;">
+      <button class="modal-close" onclick="closeLocked()" aria-label="Close">✕</button>
+    </div>
+    <div style="padding:20px 32px 36px;display:flex;flex-direction:column;align-items:center;gap:16px;">
+      <div style="font-size:52px;" id="lock-emoji">🔒</div>
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;" id="lock-title">Room Locked</div>
+      <div style="color:var(--muted);font-size:14px;line-height:1.6;" id="lock-msg">Complete the previous room to unlock this one.</div>
+      <a href="index.html#pricing" style="display:inline-block;margin-top:6px;padding:11px 28px;background:var(--accent);color:white;border-radius:20px;text-decoration:none;font-family:'Syne',sans-serif;font-weight:600;font-size:14px;transition:background 0.2s;" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='var(--accent)'" id="lock-cta">View Plans</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const rooms = {
+  '101': {
+    title: 'Room 101 — HTML Fundamentals',
+    sub: 'HTML Fundamentals · Tutor: Aaron N.',
+    icon: '🌐',
+    tutor: 'Aaron N.',
+    tutorInitials: 'AN',
+    intro: [
+      { from: 'tutor', text: "Hey Jerome! Great to see you. Ready to keep working on HTML?" },
+      { from: 'tutor', text: "Last session we covered basic tags. Today let's dive into forms and semantic HTML. Any questions from last time?" },
+    ]
+  },
+  '102': {
+    title: 'Room 102 — CSS Styling',
+    sub: 'CSS Styling · Tutor: Ella A.',
+    icon: '🎨',
+    tutor: 'Ella A.',
+    tutorInitials: 'EA',
+    intro: [
+      { from: 'tutor', text: "Hi Jerome! Welcome to Room 102. 🎨 We're going to make your HTML look amazing today." },
+      { from: 'tutor', text: "I've prepared some exercises on Flexbox. It's one of those things that clicks and then you can't unsee it. Ready?" },
+    ]
+  },
+  '103': {
+    title: 'Room 103 — JavaScript Basics',
+    sub: 'JavaScript Basics · Tutor: Christian M. · 🔴 Live',
+    icon: '⚡',
+    tutor: 'Christian M.',
+    tutorInitials: 'CM',
+    intro: [
+      { from: 'tutor', text: "Jerome! You made it to the live session. We've got a few other students joining too. 👋" },
+      { from: 'tutor', text: "Tonight we're tackling functions and event listeners. Feel free to ask anything — no such thing as a dumb question here." },
+      { from: 'tutor', text: "Let's start: what do you think this does? ➡️  `document.querySelector('.btn').addEventListener('click', () => alert('Hello!'))`" },
+    ]
+  }
+};
+
+let currentRoom = null;
+const studentInitials = 'JD';
+const now = () => {
+  const d = new Date();
+  return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+};
+
+function openRoom(id) {
+  const r = rooms[id];
+  if (!r) return;
+  currentRoom = id;
+  document.getElementById('modal-title').textContent = r.title;
+  document.getElementById('modal-sub').textContent = r.sub;
+  document.getElementById('modal-icon').textContent = r.icon;
+  document.getElementById('modal-tutor').textContent = r.tutor;
+
+  const win = document.getElementById('chat-window');
+  win.innerHTML = '';
+
+  // Date divider
+  const div = document.createElement('div');
+  div.className = 'chat-divider';
+  div.textContent = 'Today';
+  win.appendChild(div);
+
+  // Inject intro messages
+  r.intro.forEach((m, i) => {
+    setTimeout(() => {
+      appendMessage(m.from === 'tutor' ? 'recv' : 'sent', m.text, r.tutorInitials);
+    }, i * 400);
+  });
+
+  document.getElementById('room-overlay').classList.add('open');
+  setTimeout(() => document.getElementById('chat-input').focus(), 300);
+}
+
+function appendMessage(type, text, tutorInitials) {
+  const win = document.getElementById('chat-window');
+  const msg = document.createElement('div');
+  msg.className = `msg ${type}`;
+
+  const av = document.createElement('div');
+  av.className = `msg-avatar ${type === 'recv' ? 'tutor' : 'student'}`;
+  av.textContent = type === 'recv' ? tutorInitials : studentInitials;
+
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+
+  const timeEl = document.createElement('div');
+  timeEl.className = 'msg-time';
+  timeEl.textContent = now();
+
+  // Render code inline
+  bubble.innerHTML = text.replace(/`([^`]+)`/g, '<code style="background:rgba(96,165,250,0.15);padding:1px 5px;border-radius:4px;font-size:12px;font-family:monospace;">$1</code>');
+  bubble.appendChild(timeEl);
+
+  msg.appendChild(av);
+  msg.appendChild(bubble);
+  win.appendChild(msg);
+  win.scrollTop = win.scrollHeight;
+}
+
+function showTyping() {
+  const win = document.getElementById('chat-window');
+  const r = rooms[currentRoom];
+  const t = document.createElement('div');
+  t.className = 'msg recv'; t.id = 'typing-indicator';
+  t.innerHTML = `<div class="msg-avatar tutor">${r.tutorInitials}</div><div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div>`;
+  win.appendChild(t);
+  win.scrollTop = win.scrollHeight;
+}
+function hideTyping() {
+  const t = document.getElementById('typing-indicator');
+  if (t) t.remove();
+}
+
+const tutorReplies = [
+  "Great question! Let me explain that step by step.",
+  "Exactly right! You're picking this up fast 🎉",
+  "Try running that in your browser console and see what happens!",
+  "Good thinking. The key thing to remember here is how the DOM works.",
+  "That's a really common confusion — don't worry. Here's the difference: think of it like a recipe. 🍳",
+  "Yes! And now try applying that to your project from last session.",
+  "Hmm, not quite — but you're close! Think about what `return` does inside a function.",
+  "Perfect. Let's build on that — what if we add an event listener to it?",
+];
+
+function sendMessage() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text || !currentRoom) return;
+
+  const r = rooms[currentRoom];
+  appendMessage('sent', text, r.tutorInitials);
+  input.value = '';
+  input.style.height = 'auto';
+
+  // Simulate tutor reply
+  setTimeout(() => {
+    showTyping();
+    setTimeout(() => {
+      hideTyping();
+      const reply = tutorReplies[Math.floor(Math.random() * tutorReplies.length)];
+      appendMessage('recv', reply, r.tutorInitials);
+    }, 1400 + Math.random() * 800);
+  }, 600);
+}
+
+function closeRoom() {
+  document.getElementById('room-overlay').classList.remove('open');
+  currentRoom = null;
+}
+
+function showLocked(name, isPremium = false) {
+  document.getElementById('lock-emoji').textContent = isPremium ? '⭐' : '🔒';
+  document.getElementById('lock-title').textContent = isPremium ? 'Premium Room' : 'Room Locked';
+  document.getElementById('lock-msg').textContent = isPremium
+    ? `${name} is available on the Premium plan. Upgrade to get 1-on-1 mentorship sessions with a personal tutor.`
+    : `Complete the previous room to unlock ${name}.`;
+  const cta = document.getElementById('lock-cta');
+  cta.textContent = isPremium ? 'Upgrade to Premium' : 'View My Progress';
+  document.getElementById('locked-overlay').classList.add('open');
+}
+function closeLocked() {
+  document.getElementById('locked-overlay').classList.remove('open');
+}
+
+// Send on Enter (Shift+Enter for new line)
+document.getElementById('chat-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+
+// Auto-resize textarea
+document.getElementById('chat-input').addEventListener('input', function () {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+});
+
+// Close overlay on backdrop click
+document.getElementById('room-overlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeRoom(); });
+document.getElementById('locked-overlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeLocked(); });
+
+// Escape key closes modals
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeRoom(); closeLocked(); }
+});
+</script>
+
+</body>
+</html>

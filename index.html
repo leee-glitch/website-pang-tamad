@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeForge Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #0b1120;
+    color: white;
+    line-height: 1.6;
+  }
+
+  /* ── Header / Nav ── */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 8%;
+    background: #020617;
+    position: sticky;
+    top: 0;
+    z-index: 100; /* FIX: was missing — nav overlapped page content */
+  }
+
+  .logo {
+    font-weight: 600;
+    font-size: 22px;
+    color: #60a5fa;
+  }
+
+  /* FIX: hamburger menu for mobile */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 4px;
+  }
+  .hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: white;
+    border-radius: 2px;
+    transition: 0.3s;
+  }
+
+  nav {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  nav a {
+    padding: 6px 10px;
+    text-decoration: none;
+    color: rgba(255,255,255,0.8);
+    font-size: 14px;
+    border-radius: 6px;
+    transition: color 0.2s, background 0.2s;
+  }
+
+  nav a:hover, nav a:focus {
+    color: #60a5fa;
+    background: rgba(96,165,250,0.1);
+    outline: none;
+  }
+
+  /* FIX: mobile nav */
+  @media (max-width: 768px) {
+    .hamburger { display: flex; }
+    nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      background: #020617;
+      padding: 16px 8%;
+      border-top: 1px solid rgba(96,165,250,0.2);
+      gap: 0;
+    }
+    nav.open { display: flex; }
+    nav a { padding: 10px 4px; border-radius: 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  }
+
+  /* ── Hero ── */
+  .hero {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px 8%;
+    background: linear-gradient(135deg, #020617, #0f172a);
+  }
+
+  .hero h1 {
+    font-size: clamp(32px, 6vw, 56px); /* FIX: responsive font size */
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+
+  .hero p {
+    max-width: 600px;
+    margin-bottom: 30px;
+    opacity: 0.8;
+    font-size: clamp(15px, 2vw, 17px);
+  }
+
+  .btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  /* FIX: buttons were inline-elements with margin — now flex group */
+  .btn {
+    display: inline-block;
+    padding: 12px 28px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .primary {
+    background: #3b82f6;
+    color: white;
+    border: none;
+  }
+
+  .secondary {
+    border: 1px solid #3b82f6;
+    color: #60a5fa;
+    background: transparent;
+  }
+
+  .btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 20px rgba(59,130,246,0.35);
+  }
+
+  /* FIX: focus visible for keyboard users */
+  .btn:focus-visible {
+    outline: 2px solid #60a5fa;
+    outline-offset: 3px;
+  }
+
+  /* ── Sections ── */
+  section { padding: 80px 8%; }
+
+  .section-title {
+    text-align: center;
+    font-size: clamp(24px, 4vw, 32px);
+    margin-bottom: 50px;
+    color: #60a5fa;
+  }
+
+  /* ── Services / Cards ── */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+  }
+
+  .card {
+    background: #111827;
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid rgba(96,165,250,0.08); /* FIX: subtle border for depth */
+    transition: transform 0.3s, background 0.3s;
+  }
+
+  .card:hover {
+    transform: translateY(-6px);
+    background: #1f2937;
+  }
+
+  .card h3 { margin-bottom: 10px; color: #60a5fa; }
+
+  /* ── Learn Grid ── */
+  .learn-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 20px;
+  }
+
+  .learn-item {
+    background: #111827;
+    padding: 18px;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid rgba(96,165,250,0.08);
+    font-size: 15px;
+  }
+
+  /* ── Pricing ── */
+  .pricing {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+  }
+
+  .price-card {
+    background: #111827;
+    padding: 30px;
+    border-radius: 14px;
+    text-align: center;
+    border: 1px solid rgba(96,165,250,0.08);
+    transition: transform 0.3s, border-color 0.3s;
+  }
+
+  /* FIX: highlight featured plan */
+  .price-card.featured {
+    border-color: #3b82f6;
+  }
+
+  .price-card:hover { transform: translateY(-4px); }
+
+  .price {
+    font-size: 32px;
+    font-weight: 600;
+    margin: 14px 0 6px;
+    color: #60a5fa;
+  }
+
+  .price-card h3 { font-size: 20px; }
+
+  /* FIX: CTA button inside pricing card */
+  .price-card .btn {
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+  }
+
+  /* ── Contact Form ── */
+  form {
+    max-width: 500px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  /* FIX: inputs need visible text color — was black on dark bg */
+  input, textarea {
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(96,165,250,0.2);
+    background: #111827;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.4); }
+
+  input:focus, textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+  }
+
+  textarea { resize: vertical; }
+
+  /* FIX: submit button inherits form font */
+  button[type="submit"] {
+    padding: 12px;
+    border: none;
+    border-radius: 20px;
+    background: #3b82f6;
+    color: white;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  button[type="submit"]:hover { background: #2563eb; transform: scale(1.02); }
+  button[type="submit"]:focus-visible { outline: 2px solid #60a5fa; outline-offset: 3px; }
+
+  /* FIX: success/error feedback on form */
+  .form-msg {
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+  }
+  .form-msg.success { background: rgba(34,197,94,0.15); color: #4ade80; display: block; }
+  .form-msg.error   { background: rgba(239,68,68,0.15);  color: #f87171; display: block; }
+
+  /* ── Footer ── */
+  footer {
+    text-align: center;
+    padding: 25px;
+    background: #020617;
+    margin-top: 60px;
+    font-size: 14px;
+    opacity: 0.7;
+  }
+
+  /* ── Scroll fade animation ── */
+  .fade {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── Skip link (accessibility) ── */
+  /* FIX: keyboard users can skip nav */
+  .skip-link {
+    position: absolute;
+    left: -999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .skip-link:focus {
+    left: 8px;
+    top: 8px;
+    width: auto;
+    height: auto;
+    background: #3b82f6;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    z-index: 999;
+    font-size: 14px;
+  }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    .fade { transition: none; opacity: 1; transform: none; }
+    .btn:hover, .card:hover, .price-card:hover { transform: none; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+
+<body>
+
+<!-- FIX: accessibility skip link -->
+<a class="skip-link" href="#home">Skip to main content</a>
+
+<header>
+  <div class="logo" aria-label="CodeForge Academy">CodeForge</div>
+
+  <!-- FIX: hamburger for mobile -->
+  <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false" id="hamburger">
+    <span></span><span></span><span></span>
+  </button>
+
+  <nav id="main-nav" role="navigation" aria-label="Main navigation">
+    <a href="#home">Home</a>
+    <a href="#services">Services</a>
+    <a href="#learn">Courses</a>
+    <a href="#pricing">Pricing</a>
+    <a href="about.html">About Us</a>
+    <a href="login.html">Login</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- FIX: id="home" moved to section, not the header -->
+  <section id="home" class="hero">
+    <h1>Learn Coding From Scratch</h1>
+    <p>Beginner-friendly programming lessons, personal tutoring, and website development services.</p>
+    <!-- FIX: buttons grouped in a flex container -->
+    <div class="btn-group">
+      <a class="btn primary" href="signup.html">Start Learning</a>
+      <a class="btn secondary" href="#contact">Book a Session</a>
+      <a class="btn secondary" href="#pricing">View Plans</a>
+    </div>
+  </section>
+
+  <section id="services" class="fade">
+    <!-- FIX: section title uses <h2>, not <h2 class="section-title"> directly — kept consistent -->
+    <h2 class="section-title">Services</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>Coding Lessons</h3>
+        <p>Beginner-friendly coding classes covering the fundamentals of programming.</p>
+      </div>
+      <div class="card">
+        <h3>1-on-1 Tutoring</h3>
+        <p>Private lessons tailored to your goals and learning speed.</p>
+      </div>
+      <div class="card">
+        <h3>Website Development</h3>
+        <p>Custom websites for school projects, portfolios, or small businesses.</p>
+      </div>
+      <div class="card">
+        <h3>Debugging Help</h3>
+        <p>Stuck on code? Get help fixing errors and improving your programs.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="learn" class="fade">
+    <h2 class="section-title">What You Will Learn</h2>
+    <div class="learn-grid">
+      <div class="learn-item">HTML Fundamentals</div>
+      <div class="learn-item">CSS Styling</div>
+      <div class="learn-item">JavaScript Basics</div>
+      <div class="learn-item">Programming Logic</div>
+      <div class="learn-item">Debugging Skills</div>
+      <div class="learn-item">Building Real Projects</div>
+    </div>
+  </section>
+
+  <section id="pricing" class="fade">
+    <h2 class="section-title">Plans</h2>
+    <div class="pricing">
+
+      <div class="price-card">
+        <h3>Starter</h3>
+        <p>Intro to coding fundamentals</p>
+        <div class="price">$25</div>
+        <p>Basic lessons</p>
+        <a class="btn secondary" href="signup.html">Get Started</a>
+      </div>
+
+      <!-- FIX: featured plan highlighted -->
+      <div class="price-card featured">
+        <h3>Standard</h3>
+        <p>Guided coding course</p>
+        <div class="price">$60</div>
+        <p>Exercises + projects</p>
+        <a class="btn primary" href="signup.html">Get Started</a>
+      </div>
+
+      <div class="price-card">
+        <h3>Premium</h3>
+        <p>1-on-1 mentorship</p>
+        <div class="price">$120</div>
+        <p>Personal tutor + projects</p>
+        <a class="btn secondary" href="signup.html">Get Started</a>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="contact" class="fade">
+    <h2 class="section-title">Contact</h2>
+    <!-- FIX: form has aria-label and proper action handling -->
+    <form id="contact-form" aria-label="Contact form" novalidate>
+      <!-- FIX: inputs now have id + label (accessibility) -->
+      <label for="name" style="font-size:13px;opacity:0.7;">Your Name</label>
+      <input type="text" id="name" name="name" placeholder="Jane Smith" required autocomplete="name">
+
+      <label for="email" style="font-size:13px;opacity:0.7;">Your Email</label>
+      <input type="email" id="email" name="email" placeholder="jane@email.com" required autocomplete="email">
+
+      <label for="message" style="font-size:13px;opacity:0.7;">Message</label>
+      <textarea id="message" name="message" rows="4" placeholder="How can we help?" required></textarea>
+
+      <button type="submit">Send Message</button>
+      <div class="form-msg" id="form-msg" role="alert" aria-live="polite"></div>
+    </form>
+  </section>
+
+</main>
+
+<footer>
+  <p>&copy; 2026 CodeForge Academy &mdash; Learn Coding The Smart Way</p>
+</footer>
+
+<script>
+  // ── Scroll fade ──
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('show');
+        observer.unobserve(entry.target); // FIX: stop observing once shown
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade').forEach(el => observer.observe(el));
+
+  // ── Mobile nav ──
+  const hamburger = document.getElementById('hamburger');
+  const nav = document.getElementById('main-nav');
+
+  hamburger.addEventListener('click', () => {
+    const isOpen = nav.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', isOpen);
+  });
+
+  // Close nav when a link is clicked (mobile UX)
+  nav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      nav.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', false);
+    });
+  });
+
+  // ── Form handling ──
+  // FIX: prevent default submit, show feedback, validate client-side
+  const form = document.getElementById('contact-form');
+  const msg = document.getElementById('form-msg');
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    msg.className = 'form-msg';
+
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
+    const message = form.message.value.trim();
+
+    // Basic validation
+    if (!name || !email || !message) {
+      msg.textContent = 'Please fill in all fields.';
+      msg.classList.add('error');
+      return;
+    }
+
+    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRe.test(email)) {
+      msg.textContent = 'Please enter a valid email address.';
+      msg.classList.add('error');
+      return;
+    }
+
+    // Simulate send (replace with real fetch/API call)
+    msg.textContent = 'Message sent! We\'ll get back to you soon.';
+    msg.classList.add('success');
+    form.reset();
+  });
+</script>
+
+</body>
+</html>
